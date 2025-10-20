@@ -4,31 +4,41 @@ import {
   RouterProvider,
   Route,
   createRoutesFromElements,
+  Outlet,
 } from "react-router-dom";
 
-// Sayfa bileşenlerini import et (örnek)
 import Home from "./pages/Home";
 import About from "./pages/About";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
+import Header from "./components/Header";
 
-// Rotaları tanımla
+
+function Layout() {
+  return (
+    <>
+      <Header />
+      <Outlet /> {/* Alt sayfalar buraya render edilir */}
+    </>
+  );
+}
+// 🔹 Router tanımı
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <>
+    <Route element={<Layout />}> {/* Layout parent route */}
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/projects" element={<Projects />} />
-    </>
+    </Route>
   )
 );
 
-// Uygulama
+
 export default function App() {
   return <RouterProvider router={router} />;
 }

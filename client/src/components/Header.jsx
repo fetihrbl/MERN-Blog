@@ -16,8 +16,8 @@ export default function Header() {
 
   return (
     <Navbar fluid className="border-b-2 py-4">
-      <NavbarBrand as={Link} to="/" className="text-xl">
-        <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white ">
+      <NavbarBrand as={Link} to="/" className="text-xl font-semibold">
+        <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
           Fatih's
         </span>
         Blog

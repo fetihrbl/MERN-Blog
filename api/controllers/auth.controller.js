@@ -58,14 +58,13 @@ export const signin = async (req, res, next) => {
       { expiresIn: "1d" } // 
     );
 
+    //Converting a Mongoose Document to a pure JavaScript object
     const userObject = validUser.toObject();
     delete userObject.password;
-
 
     res.status(200).cookie('access_token', token, {
       httpOnly: true
     }).json(userObject);
-
 
   } catch (error) {
     next(error)

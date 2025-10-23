@@ -4,24 +4,33 @@ import { errorHandler } from "../utils/error.js";
 
 export const signup = async (req, res, next) => {
     const { username, email, password } = req.body;
-
-    if (!username || !email || !password || username === '' || email === '' || password === '') {
-        next(errorHandler(400, 'All fields are required'));
+  
+    if (!username || !email || !password) {
+      return next(errorHandler(400, 'All fields are required'));
     }
-
-    const hashedPassword = await bcryptjs.hash(password, 10);
-
-    const newUser = new User({
+  
+    try {
+      const hashedPassword = await bcryptjs.hash(password, 10);
+  
+      const newUser = new User({
         username,
         email,
         password: hashedPassword,
-    });
-
-    try {
-        await newUser.save();
-        res.json('Sign up succesful');    
+      });
+  
+      await newUser.save();
+  
+      
+      res.status(201).json({
+        message: 'Sign up successful',
+        user: {
+          id: newUser._id,
+          username: newUser.username,
+          email: newUser.email,
+        },
+      });
     } catch (error) {
-        next(error);
+      next(error);
     }
-
-}
+  };
+  

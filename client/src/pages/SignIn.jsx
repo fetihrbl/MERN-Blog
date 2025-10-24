@@ -1,11 +1,14 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import React, {useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { signInStart, signInSuccess, signInFailure} from '../redux/user/userSlice.js';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [loading, setLoading] = useState(false);
+  
+  const {loading, error: errorMessage} = useSelector(state => state.user);
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -14,42 +17,34 @@ export default function SignIn() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    setErrorMessage(null);
-
+    e.preventDefault()
+  
     if (!formData.email || !formData.password) {
-      return setErrorMessage("Please fill out all fields");
+      return dispatch(signInFailure('Please fill all the fields'))
     }
-
+  
     try {
-      setLoading(true);
-
-      const res = await fetch("/api/auth/signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      dispatch(signInStart())
+  
+      const res = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
-      });
-
-      const data = await res.json();
-
+      })
+  
+      const data = await res.json()
+  
       if (!res.ok || data.success === false) {
-        return setErrorMessage(data.message || "Something went wrong");
+        return dispatch(signInFailure(data.message || 'Sign in failed'))
       }
-
-      console.log("Signup successful:", data);
-
-      setLoading(false);
-
-      if (res.ok) {
-        navigate('/');
-      }
-
+  
+      dispatch(signInSuccess(data))
+      navigate('/')
     } catch (error) {
-      setErrorMessage("Signup failed: " + error.message);
-      setLoading(false);
+      dispatch(signInFailure(error.message))
     }
-  };
+  }
+  
 
   return (
     <div className="min-h-screen mt-20">

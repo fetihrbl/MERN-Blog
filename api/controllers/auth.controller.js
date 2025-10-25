@@ -73,18 +73,17 @@ export const signin = async (req, res, next) => {
   
 export const googleAuth = async (req, res, next) => {
   const { email, name, googlePhotoURL } = req.body; 
-  try {
-    
+  try { 
     const user = await User.findOne({ email });
-
     if (user) {
-     
       const token = jwt.sign(
         { id: user._id },
         process.env.JWT_SECRET
       );
 
-      const { password, ...rest } = user._doc;
+      const userObject = user.toObject();
+      delete userObject.password;
+
       return res
         .status(200)
         .cookie("access_token", token, {
@@ -92,9 +91,8 @@ export const googleAuth = async (req, res, next) => {
           sameSite: "strict", 
           secure: process.env.NODE_ENV === "production", 
         })
-        .json(rest);
-    } else {
-      
+        .json(userObject);
+    } else { 
       const generatedPassword =
         Math.random().toString(36).slice(-8) +
         Math.random().toString(36).slice(-8);
@@ -117,7 +115,9 @@ export const googleAuth = async (req, res, next) => {
         process.env.JWT_SECRET
       );
 
-      const { password, ...rest } = newUser._doc;
+      const userObject = newUser.toObject();
+      delete userObject.password;
+
       return res
         .status(200)
         .cookie("access_token", token, {
@@ -125,7 +125,7 @@ export const googleAuth = async (req, res, next) => {
           sameSite: "strict",
           secure: process.env.NODE_ENV === "production",
         })
-        .json(rest);
+        .json(userObject);
     }
   } catch (error) {
     next(error);

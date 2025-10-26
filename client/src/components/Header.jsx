@@ -13,15 +13,20 @@ import {
   NavbarToggle,
 } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
-import { FaMoon } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { FaMoon, FaSun } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleTheme } from "../redux/theme/themeSlice";
+
 
 export default function Header() {
   const path = useLocation().pathname;
+  const dispatch = useDispatch();
+
   const { currentUser } = useSelector((state) => state.user);
+  const { theme } = useSelector((state) => state.theme);
 
   return (
-    <Navbar fluid className="border-b-2 py-4">
+    <Navbar fluid className="border-b-2 border-gray-200 dark:border-gray-700 py-4">
       {/* LOGO */}
       <NavbarBrand
         as={Link}
@@ -38,11 +43,11 @@ export default function Header() {
       <div className="flex md:order-2 gap-3 items-center">
         {/* DARK MODE BUTTON */}
         <Button
-          className="w-12 h-10 hidden sm:flex items-center justify-center"
-          color="gray"
+         className="w-12 h-10 hidden sm:flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 focus:ring-0"
           pill
+          onClick={() => dispatch(toggleTheme())}
         >
-          <FaMoon />
+          {theme === 'light' ? <FaSun /> : <FaMoon/>}
         </Button>
 
         {/* USER LOGIN DURUMU */}

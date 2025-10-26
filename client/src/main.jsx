@@ -5,6 +5,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import App from './App';
 import { store, persistor } from './redux/store.js';
 import './index.css';
+import ThemeProvider from './components/ThemeProvider.jsx';
 
 const container = document.getElementById('root');
 
@@ -20,7 +21,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={<div>Loading...</div>} persistor={persistor}>
-        <App />
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
       </PersistGate>
     </Provider>
   </React.StrictMode>

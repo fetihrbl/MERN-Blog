@@ -13,7 +13,7 @@ import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter } from "react-
 
 export default function FooterCom() {
   return (
-    <FlowbiteFooter container className="rounded-none">
+    <FlowbiteFooter container className="rounded-none border-t-2 border-gray-200 dark:border-gray-700">
       <div className="w-full max-w-7xl mx-auto">
         <div className="grid w-full justify-between sm:flex md:grid-cols-1">
           <div className="mt-5">

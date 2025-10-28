@@ -12,7 +12,7 @@ import {
 import storage from 'redux-persist/lib/storage';
 import userReducer from './user/userSlice';
 import themeReducer from './theme/themeSlice'
-import { theme } from 'flowbite-react';
+
 
 const rootReducer = combineReducers({
   user: userReducer,

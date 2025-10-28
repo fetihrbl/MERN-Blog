@@ -26,7 +26,7 @@ export default function Header() {
   const { theme } = useSelector((state) => state.theme);
 
   return (
-    <Navbar fluid className="border-b-2 border-gray-200 dark:border-gray-700 py-4">
+    <Navbar fluid className="border-b-2 border-gray-200 dark:border-gray-700 py-4">      
       {/* LOGO */}
       <NavbarBrand
         as={Link}
@@ -57,11 +57,11 @@ export default function Header() {
             inline
             label={
               <Avatar
-                alt="user"
-                img={currentUser.profilePicture}
-                rounded
-                className="cursor-pointer"
-              />
+              alt={currentUser?.username || "User"}
+              img={currentUser?.profilePicture || "https://via.placeholder.com/96"}
+              rounded
+              className="cursor-pointer"
+            />
             }
           >
             <DropdownHeader>

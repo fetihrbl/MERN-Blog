@@ -39,7 +39,7 @@ export default function Header() {
         Blog
       </NavbarBrand>
 
-      {/* SAĞ TARAF */}
+      {/* Right Side */}
       <div className="flex md:order-2 gap-3 items-center">
         {/* DARK MODE BUTTON */}
         <Button
@@ -50,7 +50,7 @@ export default function Header() {
           {theme === 'light' ? <FaSun /> : <FaMoon/>}
         </Button>
 
-        {/* USER LOGIN DURUMU */}
+        {/* USER LOGIN */}
         {currentUser ? (
           <Dropdown
             arrowIcon={false}

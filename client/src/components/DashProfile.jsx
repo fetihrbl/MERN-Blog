@@ -1,11 +1,15 @@
-import { Alert, Button, TextInput } from "flowbite-react";
+import { Alert, Button, Modal, ModalBody, ModalHeader, TextInput } from "flowbite-react";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import {
   updateStart,
   updateSuccess,
   updateFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
 } from "../redux/user/userSlice";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 export default function DashProfile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -16,8 +20,8 @@ export default function DashProfile() {
     email: currentUser?.email || "",
     password: "",
   });
-
   const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -56,6 +60,24 @@ export default function DashProfile() {
       }
     } catch (err) {
       dispatch(updateFailure(err.message));
+    }
+  };
+
+  const handleDeleteUser = async (e) => {
+    setShowModal(false);
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: 'DELETE'
+      });
+      const data = await res.json();
+      if(!res.ok){
+        dispatch(deleteUserFailure(data.message))
+      }else {
+        dispatch(deleteUserSuccess(data))
+      }
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
     }
   };
 
@@ -111,9 +133,28 @@ export default function DashProfile() {
       </div>
 
       <div className="text-red-500 flex justify-between mt-5">
-        <span className="cursor-pointer">Delete Account</span>
+        <span onClick={()=>setShowModal(true)} className="cursor-pointer">Delete Account</span>
         <span className="cursor-pointer">Sign Out</span>
       </div>
+      <Modal show={showModal} size="md" onClose={() => setShowModal(false)} popup>
+        <ModalHeader />
+        <ModalBody>
+          <div className="text-center ">
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200"/>
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete this product?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="red" onClick={handleDeleteUser}>
+                Yes, I'm sure
+              </Button>
+              <Button color="alternative" onClick={() => setShowModal(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </ModalBody>
+      </Modal>
     </div>
   );
 }

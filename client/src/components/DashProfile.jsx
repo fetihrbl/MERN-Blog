@@ -4,7 +4,7 @@ import { useState } from "react";
 import {
   updateStart,
   updateSuccess,
-  updateFailuer,
+  updateFailure,
 } from "../redux/user/userSlice";
 
 export default function DashProfile() {
@@ -28,11 +28,11 @@ export default function DashProfile() {
     e.preventDefault();
 
     const noChange =
-  formData.username === currentUser.username &&
-  formData.email === currentUser.email &&
-  !formData.password;
+      formData.username === currentUser.username &&
+      formData.email === currentUser.email &&
+      !formData.password;
 
-  if (noChange) return;
+    if (noChange) return;
 
     dispatch(updateStart());
 
@@ -49,13 +49,13 @@ export default function DashProfile() {
       const data = await res.json();
 
       if (!res.ok) {
-        dispatch(updateFailuer(data.message));
+        dispatch(updateFailure(data.message || "Something went wrong."));
       } else {
         dispatch(updateSuccess(data));
         setUpdateUserSuccess("User's profile updated successfully");
       }
     } catch (err) {
-      dispatch(updateFailuer(err.message));
+      dispatch(updateFailure(err.message));
     }
   };
 
@@ -96,6 +96,7 @@ export default function DashProfile() {
 
         <Button
           type="submit"
+          disabled={loading}
           className="bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 text-white hover:bg-gradient-to-br focus:ring-purple-300 dark:focus:ring-purple-800"
         >
           {loading ? "Updating..." : "Update"}
@@ -104,7 +105,9 @@ export default function DashProfile() {
 
       <div className="mt-4 flex flex-col gap-2">
         {error && <Alert color="failure">{error}</Alert>}
-        {updateUserSuccess && <Alert color="success">{updateUserSuccess}</Alert>}
+        {updateUserSuccess && (
+          <Alert color="success">{updateUserSuccess}</Alert>
+        )}
       </div>
 
       <div className="text-red-500 flex justify-between mt-5">

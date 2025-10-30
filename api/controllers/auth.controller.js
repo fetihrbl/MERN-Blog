@@ -75,6 +75,7 @@ export const googleAuth = async (req, res, next) => {
   const { email, name, googlePhotoURL } = req.body; 
   try { 
     const user = await User.findOne({ email });
+    console.log("User found:", user);
     if (user) {
       const token = jwt.sign(
         { id: user._id },

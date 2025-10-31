@@ -16,7 +16,10 @@ import Projects from "./pages/Projects";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute.jsx";
-
+import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute.jsx";
+import CreatePosts from "./pages/CreatePosts.jsx";
+//quill’in stil dosyaları
+import 'quill/dist/quill.snow.css';
 
 function Layout() {
   return (
@@ -37,6 +40,9 @@ const router = createBrowserRouter(
       <Route path="/sign-up" element={<SignUp />} />
       <Route element={<PrivateRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />
+      </Route>
+      <Route element={<OnlyAdminPrivateRoute />}>
+        <Route path="/create-post" element={<CreatePosts />} />
       </Route>
       <Route path="/projects" element={<Projects />} />
     </Route>

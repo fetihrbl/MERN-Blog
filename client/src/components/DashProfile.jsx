@@ -1,4 +1,11 @@
-import { Alert, Button, Modal, ModalBody, ModalHeader, TextInput } from "flowbite-react";
+import {
+  Alert,
+  Button,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  TextInput,
+} from "flowbite-react";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import {
@@ -11,6 +18,7 @@ import {
   signoutSuccess,
 } from "../redux/user/userSlice";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 export default function DashProfile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -69,13 +77,13 @@ export default function DashProfile() {
     try {
       dispatch(deleteUserStart());
       const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: 'DELETE'
+        method: "DELETE",
       });
       const data = await res.json();
-      if(!res.ok){
-        dispatch(deleteUserFailure(data.message))
-      }else {
-        dispatch(deleteUserSuccess(data))
+      if (!res.ok) {
+        dispatch(deleteUserFailure(data.message));
+      } else {
+        dispatch(deleteUserSuccess(data));
       }
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
@@ -84,11 +92,11 @@ export default function DashProfile() {
 
   const handleSignout = async () => {
     try {
-      const res = await fetch('/api/user/signout', {
-        method: 'POST',
+      const res = await fetch("/api/user/signout", {
+        method: "POST",
       });
       const data = await res.json();
-      if(!res.ok) {
+      if (!res.ok) {
         console.log(data.message);
       } else {
         dispatch(signoutSuccess());
@@ -96,7 +104,7 @@ export default function DashProfile() {
     } catch (error) {
       console.log(error.message);
     }
-  }
+  };
 
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
@@ -140,6 +148,18 @@ export default function DashProfile() {
         >
           {loading ? "Updating..." : "Update"}
         </Button>
+
+        {currentUser.isAdmin && (
+          <Button
+            disabled={loading}
+            as={Link}
+            to="/create-post"
+            type="button"
+            className="bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 text-white hover:bg-gradient-to-br focus:ring-pink-300 dark:focus:ring-pink-800 w-full"
+          >
+            {loading ? "Updating..." : "Create a post"}
+          </Button>
+        )}
       </form>
 
       <div className="mt-4 flex flex-col gap-2">
@@ -150,14 +170,23 @@ export default function DashProfile() {
       </div>
 
       <div className="text-red-500 flex justify-between mt-5">
-        <span onClick={()=>setShowModal(true)} className="cursor-pointer">Delete Account</span>
-        <span onClick={handleSignout} className="cursor-pointer">Sign Out</span>
+        <span onClick={() => setShowModal(true)} className="cursor-pointer">
+          Delete Account
+        </span>
+        <span onClick={handleSignout} className="cursor-pointer">
+          Sign Out
+        </span>
       </div>
-      <Modal show={showModal} size="md" onClose={() => setShowModal(false)} popup>
+      <Modal
+        show={showModal}
+        size="md"
+        onClose={() => setShowModal(false)}
+        popup
+      >
         <ModalHeader />
         <ModalBody>
           <div className="text-center ">
-            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200"/>
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
             <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
               Are you sure you want to delete this product?
             </h3>

@@ -1,5 +1,5 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
-import React, {useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/OAuth.jsx";
 
@@ -19,7 +19,8 @@ export default function SignUp() {
 
     setErrorMessage(null);
 
-    if (!formData.username || !formData.email || !formData.password) {
+    const { username, email, password } = formData;
+    if (!username || !email || !password) {
       return setErrorMessage("Please fill out all fields");
     }
 
@@ -35,19 +36,15 @@ export default function SignUp() {
       const data = await res.json();
 
       if (!res.ok || data.success === false) {
-        return setErrorMessage(data.message || "Something went wrong");
+        // Sunucudan özel bir hata mesajı geldiyse onu göster
+        setErrorMessage(data.message || "Something went wrong");
+      } else {
+        console.log("✅ Signup successful:", data);
+        navigate("/sign-in");
       }
-
-      console.log("Signup successful:", data);
-
-      setLoading(false);
-
-      if (res.ok) {
-        navigate('/sign-in')
-      }
-
     } catch (error) {
       setErrorMessage("Signup failed: " + error.message);
+    } finally {
       setLoading(false);
     }
   };
@@ -121,7 +118,6 @@ export default function SignUp() {
             </Button>
 
             <OAuth />
-
           </form>
           <div className="flex gap-2 text-sm mt-5">
             <span>Have a accaount?</span>

@@ -30,7 +30,7 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      lowercase: true, // otomatik küçük har
+      lowercase: true, 
     },
   },
   { timestamps: true }
